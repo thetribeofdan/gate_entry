@@ -20,6 +20,7 @@ export class UserController {
       const onboardingLink = `http://127.0.0.1:8700/api/auth/onboard/login?token=${token}`;
       console.log(onboardingLink);
       //TODO: SEND MAIL WITH ONBOARDING LINK TO USER FUNCTION
+      
     }
 
     return buildResponse(newUser, 'User registered successfully', true, 201);

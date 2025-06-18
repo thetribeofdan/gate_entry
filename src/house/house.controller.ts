@@ -5,12 +5,13 @@ import { CreateHouseDto } from './dto/create-house.dto';
 import { ApiResponse, buildResponse } from '@utils/response.util';
 import { Roles } from 'src/auth/decorators/role.decorator';
 import { UpdateHouseDto } from './dto/update-house.dto';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Controller('house')
 export class HouseController {
   constructor(private readonly houseService: HouseService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Post('create')
   async createHouse(
@@ -30,18 +31,27 @@ export class HouseController {
       return buildResponse([], 'House not found', false, 404);
     }
 
+    delete house.created_at;
+    delete house.updated_at;
+    delete house.id;
+
     return buildResponse(house, 'Public house details retrieved', true, 200);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Get()
   async getAllHouses(): Promise<ApiResponse> {
     const houses = await this.houseService.findAll();
-    return buildResponse(houses, 'All houses retrieved successfully');
+    return buildResponse(
+      houses,
+      'All houses retrieved successfully',
+      true,
+      200,
+    );
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Put(':id')
   async updateHouse(
@@ -50,12 +60,12 @@ export class HouseController {
   ): Promise<ApiResponse> {
     const updatedHouse = await this.houseService.update(id, dto);
 
-    if(!updatedHouse) return buildResponse([], 'House not found', false, 404);
+    if (!updatedHouse) return buildResponse([], 'House not found', false, 404);
 
-    return buildResponse(updatedHouse, 'House updated successfully');
+    return buildResponse(updatedHouse, 'House updated successfully', true, 210);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Delete(':id')
   async deleteHouse(
@@ -63,8 +73,14 @@ export class HouseController {
   ): Promise<ApiResponse> {
     const deletedHouse = await this.houseService.delete(id);
 
-    if(!deletedHouse) return buildResponse([], 'House not found/Successfully Deleted', false, 404);
+    if (!deletedHouse)
+      return buildResponse(
+        [],
+        'House not found/Successfully Deleted',
+        false,
+        404,
+      );
 
-    return buildResponse([], 'House deleted successfully');
+    return buildResponse([], 'House deleted successfully', true, 210);
   }
 }

@@ -4,8 +4,10 @@ import * as crypto from 'crypto';
 
 const algorithm = 'aes-256-cbc';
 const secretKey =
-  process.env.ONBOARD_SECRET_KEY || 'fallback-32-byte-long-secret-key!'; // must be 32 chars
+  process.env.ONBOARD_SECRET_KEY || 'fallback-32-byte-long-secret-key';
 const ivLength = 16;
+
+console.log(secretKey);
 
 export function encryptPayload(payload: object): string {
   const iv = crypto.randomBytes(ivLength);
