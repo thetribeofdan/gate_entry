@@ -21,7 +21,7 @@ class IsHouseIdRequiredConstraint implements ValidatorConstraintInterface {
     if (role_id === 3) {
       return typeof house_id === 'number' && !isNaN(house_id);
     }
-    return true; // otherwise optional
+    return true;
   }
 
   defaultMessage(args: ValidationArguments) {
@@ -34,7 +34,7 @@ export class CreateUserDto {
   name: string;
 
   @IsOptional()
-  @IsPhoneNumber('NG') // You can adjust region as needed
+  @IsPhoneNumber('NG')
   phone: string;
 
   @IsOptional()

@@ -7,6 +7,7 @@ import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HouseModule } from './house/house.module';
+import { GateModule } from './gate/gate.module';
 
 @Module({
   imports: [
@@ -35,6 +36,8 @@ import { HouseModule } from './house/house.module';
     AuthModule,
 
     HouseModule,
+
+    GateModule,
   ],
   controllers: [AppController],
   providers: [AppService],
