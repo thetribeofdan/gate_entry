@@ -7,6 +7,7 @@ import { RoleEntity } from './entities/role.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { encryptPayload } from '@utils/encryption.util';
+import { sendOnboardingEmail } from '@utils/email';
 
 @Injectable()
 export class UserService {
@@ -49,10 +50,10 @@ export class UserService {
     const user = this.userRepository.create({
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
-      role, // Set role object (not just role_id)
+      role,
     });
 
-    return this.userRepository.save(user);
+    return this.userRepository.save(user);;
   }
 
   async findByPhone(phone: string): Promise<UserEntity | null> {
