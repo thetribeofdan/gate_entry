@@ -1,5 +1,8 @@
 // src/utils/email.ts
 import { MailerSend, EmailParams, Recipient, Sender } from 'mailersend';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const mailerSend = new MailerSend({
   apiKey: process.env.MAILERSEND_API_KEY!,
@@ -9,6 +12,8 @@ const sentFrom = new Sender(
   process.env.MAILERSEND_FROM_EMAIL!,
   process.env.MAILERSEND_FROM_NAME!,
 );
+
+console.log("Sent Credentials" +process.env.MAILERSEND_FROM_EMAIL);
 
 async function sendTemplateEmail(
   to: string,

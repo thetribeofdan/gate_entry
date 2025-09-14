@@ -32,7 +32,6 @@ export class GateService {
   async createFromOccupant(
     dto: CreateVisitorEntryDto,
     occupantId: number,
-    // houseId: number,
   ) {
     // 1️⃣ Validate bare minimum required fields
     if (!dto.person_name || !dto.person_gender) {
@@ -42,11 +41,11 @@ export class GateService {
     }
 
     const occupant = await this.userEntity.findOne({
-      where: { id: occupantId, is_active: true, house_id: dto.house_id },
+      where: { id: occupantId, is_active: true},
     });
 
     if (!occupant) {
-      throw new NotFoundException('Occupant not Allocated to House');
+      throw new NotFoundException('Occupant not Activated/Authorized');
     }
 
     // 2️⃣ Create entry (approval by Occupant is automatic)
@@ -54,7 +53,7 @@ export class GateService {
       person_name: dto.person_name,
       person_gender: dto.person_gender,
       occupant: { id: occupantId },
-      house: { id: dto.house_id },
+      house: { id: occupant.house_id },
       entry_type: EntryType.WAITLIST,
       approved_at: new Date(),
       approved_by: { id: occupantId },
@@ -74,7 +73,7 @@ export class GateService {
       id: savedEntry.id,
       person_name: savedEntry.person_name,
       person_gender: savedEntry.person_gender,
-      house_id: dto.house_id,
+      house_id: occupant.house_id,
       created_at: savedEntry.created_at,
     };
 
@@ -92,6 +91,12 @@ export class GateService {
     if (!dto.person_name || !dto.person_gender) {
       throw new BadRequestException(
         'Person name and gender are required to register a visitor',
+      );
+    }
+
+    if( !dto.house_id){
+      throw new BadRequestException(
+        'House ID is required to register a visitor from gateman',
       );
     }
 
@@ -158,6 +163,7 @@ export class GateService {
       where: { id: entryId },
       relations: ['house'],
     });
+
     if (!entry) throw new NotFoundException('Entry not found');
 
     const approver = await this.userEntity.findOne({
@@ -173,6 +179,7 @@ export class GateService {
     entry.approved_by = { id: approverId } as any;
     entry.approved_at = new Date();
     entry.occupant = { id: approverId } as any;
+    entry.status = VisitorStatus.DENIED;
 
     return await this.entryRepo.save(entry);
   }
@@ -266,7 +273,7 @@ export class GateService {
 
     return await this.entryRepo.find({
       where,
-      relations: ['occupant', 'house', 'approved_by', 'marked_by'],
+      relations: ['occupant', 'house', 'approved_by'],
       order: { created_at: 'DESC' },
     });
   }

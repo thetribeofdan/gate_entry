@@ -43,7 +43,7 @@ export class HouseController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('admin', 'gateman')
   @Get()
   async getAllHouses(): Promise<ApiResponse> {
     const houses = await this.houseService.findAll();

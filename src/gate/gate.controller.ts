@@ -17,6 +17,7 @@ import { Roles } from 'src/auth/decorators/role.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApprovalStatus, VisitorStatus } from './entities/visitor-entry.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { buildResponse } from '@utils/response.util';
 
 
 @ApiTags('Visitors')
@@ -29,63 +30,82 @@ export class GateController {
   // Occupant initiated visitor registration
   @Roles('occupant')
   @Post('occupant')
-  createFromOccupant(
-    @Body() dto: CreateVisitorEntryDto,
-    @Req() req
-  ) {
-    return this.gateService.createFromOccupant(dto, req.user.id);
+  async createFromOccupant(@Body() dto: CreateVisitorEntryDto, @Req() req) {
+    const response = await this.gateService.createFromOccupant(
+      dto,
+      req.user.id,
+    );
+
+    return buildResponse(
+      response,
+      'Visitor entry created successfully',
+      true,
+      201,
+    );
   }
 
   // Gateman initiated visitor registration
   @Roles('gateman')
   @Post('gateman')
-  createFromGateman(
-    @Body() dto: CreateVisitorEntryDto,
-    @Req() req
-  ) {
-    return this.gateService.createFromGateman(dto, req.user.id);
+  async createFromGateman(@Body() dto: CreateVisitorEntryDto, @Req() req) {
+    const response = await this.gateService.createFromGateman(dto, req.user.id);
+
+    return buildResponse(
+      response,
+      'Visitor entry created successfully',
+      true,
+      201,
+    );
   }
 
   // Approve visitor (occupant)
   @Roles('occupant')
   @Patch('approve')
-  approveEntry(
-    @Query('id', ParseIntPipe) id: number,
-    @Req() req
-  ) {
-    return this.gateService.approveEntry(id, req.user.id);
+  async approveEntry(@Query('id', ParseIntPipe) id: number, @Req() req) {
+    const response = await this.gateService.approveEntry(id, req.user.id);
+
+    return buildResponse(
+      response,
+      'Visitor entry approved successfully',
+      true,
+      200,
+    );
   }
 
   // Reject visitor (occupant)
   @Roles('occupant')
   @Patch('reject')
-  rejectEntry(
-    @Query('id', ParseIntPipe) id: number,
-    @Req() req
-  ) {
-    return this.gateService.rejectEntry(id, req.user.id);
+  async rejectEntry(@Query('id', ParseIntPipe) id: number, @Req() req) {
+    const response = await this.gateService.rejectEntry(id, req.user.id);
+
+    return buildResponse(
+      response,
+      'Visitor entry rejected successfully',
+      true,
+      200,
+    );
   }
 
   // Mark visitor as entered (gateman)
   @Roles('gateman')
   @Patch('mark-entered')
-  markAsEntered(
-    @Query('id', ParseIntPipe) id: number,
-    @Req() req
-  ) {
-    return this.gateService.markAsEntered(id, req.user.id);
+  async markAsEntered(@Query('id', ParseIntPipe) id: number, @Req() req) {
+    const response = await this.gateService.markAsEntered(id, req.user.id);
+
+    return buildResponse(response, 'Visitor marked as entered', true, 200);
   }
 
   // Scan QR code
   @Roles('gateman')
   @Post('scan')
-  scanQrCode(@Body('token') token: string) {
-    return this.gateService.scanQrCode(token);
+  async scanQrCode(@Body('token') token: string) {
+    const response = await this.gateService.scanQrCode(token);
+    return buildResponse(response, 'QR Code scanned successfully', true, 200);
   }
 
   // Get all visitors (with filters)
   @Get()
-  findAll(
+  async findAll(
     @Query('approval_status') approvalStatus?: ApprovalStatus,
     @Query('onlyValid') onlyValid?: string,
     @Query('status') status?: VisitorStatus,
@@ -95,6 +115,13 @@ export class GateController {
       onlyValid: onlyValid === 'true',
       status: status,
     };
-    return this.gateService.findAll(filters);
+    const response = await this.gateService.findAll(filters);
+
+    return buildResponse(
+      response,
+      'Visitor entries fetched successfully',
+      true,
+      200,
+    );
   }
 }

@@ -8,8 +8,8 @@ export interface ApiResponse<T = any> {
 }
 
 export function buildResponse<T>(
-  data: T,
-  message = 'Success',
+  data: [] | object | any,
+  message = "Success",
   status = true,
   statusCode = 400,
 ): ApiResponse<T> {

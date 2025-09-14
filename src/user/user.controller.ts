@@ -22,8 +22,7 @@ export class UserController {
       console.log(onboardingLink);
 
       //TODO: SEND MAIL WITH ONBOARDING LINK TO USER
-
-      await sendOnboardingEmail(newUser.email, newUser.name, onboardingLink, 'Admin');
+      // await sendOnboardingEmail(newUser.email, newUser.name, onboardingLink, 'Admin');
     }
 
     return buildResponse(newUser, 'User registered successfully', true, 201);
