@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { buildResponse } from '@utils/response.util';
 import { encryptPayload } from '@utils/encryption.util';
+import { sendOnboardingEmail } from '@utils/email';
 
 @Controller('user')
 export class UserController {
@@ -19,8 +20,9 @@ export class UserController {
       });
       const onboardingLink = `http://127.0.0.1:8700/api/auth/onboard/login?token=${token}`;
       console.log(onboardingLink);
-      //TODO: SEND MAIL WITH ONBOARDING LINK TO USER FUNCTION
-      
+
+      //TODO: SEND MAIL WITH ONBOARDING LINK TO USER
+      // await sendOnboardingEmail(newUser.email, newUser.name, onboardingLink, 'Admin');
     }
 
     return buildResponse(newUser, 'User registered successfully', true, 201);

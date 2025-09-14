@@ -1,6 +1,9 @@
 // src/common/utils/encryption.util.ts
 
+import * as dotenv from 'dotenv';
 import * as crypto from 'crypto';
+
+dotenv.config();
 
 const algorithm = 'aes-256-cbc';
 const secretKey =
@@ -11,7 +14,8 @@ console.log(secretKey);
 
 export function encryptPayload(payload: object): string {
   const iv = crypto.randomBytes(ivLength);
-  const cipher = crypto.createCipheriv(algorithm, Buffer.from(secretKey), iv);
+  const key = Buffer.from(secretKey, 'hex');
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
   const encrypted = Buffer.concat([
     cipher.update(JSON.stringify(payload)),
     cipher.final(),
@@ -22,11 +26,9 @@ export function encryptPayload(payload: object): string {
 export function decryptPayload(token: string): any {
   const [ivHex, encrypted] = token.split(':');
   const iv = Buffer.from(ivHex, 'hex');
-  const decipher = crypto.createDecipheriv(
-    algorithm,
-    Buffer.from(secretKey),
-    iv,
-  );
+  const key = Buffer.from(secretKey, 'hex');
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
   const decrypted = Buffer.concat([
     decipher.update(Buffer.from(encrypted, 'hex')),
     decipher.final(),

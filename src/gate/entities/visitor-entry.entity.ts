@@ -26,6 +26,7 @@ export enum VisitorStatus {
   PENDING = 'pending',
   ALLOWED = 'allowed',
   DENIED = 'denied',
+  EXPIRED = 'expired',
 }
 
 export enum ApprovalStatus {
@@ -53,6 +54,9 @@ export class VisitorEntryEntity {
 
   @Column({ nullable: true })
   person_phone: string;
+
+  @Column({ nullable: true })
+  person_email: string;
 
   @Column({ nullable: true })
   car_name_brand: string;
@@ -90,6 +94,9 @@ export class VisitorEntryEntity {
   @Column({ type: 'timestamp', nullable: true })
   allowed_at: Date;
 
+  @Column({ type: 'timestamp', nullable: true })
+  valid_until: Date;
+
   // In VisitorEntryEntity
   @Column({
     type: 'enum',
@@ -98,8 +105,11 @@ export class VisitorEntryEntity {
   })
   approval_status: ApprovalStatus;
 
-  @Column({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   approved_at: Date;
+
+  @Column({ type: 'text', nullable: true })
+  qr_code: string;
 
   @ManyToOne(() => UserEntity, { nullable: true })
   @JoinColumn({ name: 'approved_by' })

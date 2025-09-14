@@ -10,6 +10,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  // TODO:so instead of this...we will use an identifier from the phone...something specific to just one device that doesnt change....then we'll verify that every time the 1 hr token expires
+  // Basically we';; combine the phone specific info with a key from the system...if must produce a unique string...if it doesnt then the user is not gonna be authenticated
   async validateUser(identifier: string, pass: string) {
     const user = await this.userService.findByEmailOrPhone(identifier);
     if (!user || !(await bcrypt.compare(pass, user.password))) {

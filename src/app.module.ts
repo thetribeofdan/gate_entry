@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HouseModule } from './house/house.module';
 import { GateModule } from './gate/gate.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -30,6 +31,8 @@ import { GateModule } from './gate/gate.module';
       }),
       inject: [ConfigService],
     }),
+
+    ScheduleModule.forRoot(),
 
     UserModule,
 

@@ -6,11 +6,14 @@ import { ApiResponse, buildResponse } from '@utils/response.util';
 import { Roles } from 'src/auth/decorators/role.decorator';
 import { UpdateHouseDto } from './dto/update-house.dto';
 import { RolesGuard } from 'src/auth/guards/role.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('House')
 @Controller('house')
 export class HouseController {
   constructor(private readonly houseService: HouseService) {}
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Post('create')
@@ -38,8 +41,9 @@ export class HouseController {
     return buildResponse(house, 'Public house details retrieved', true, 200);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('admin', 'gateman')
   @Get()
   async getAllHouses(): Promise<ApiResponse> {
     const houses = await this.houseService.findAll();
@@ -51,6 +55,7 @@ export class HouseController {
     );
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Put(':id')
@@ -65,6 +70,7 @@ export class HouseController {
     return buildResponse(updatedHouse, 'House updated successfully', true, 210);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
   @Delete(':id')
