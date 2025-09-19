@@ -21,7 +21,9 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "migration:generate": "npm run build && typeorm migration:generate -d dist/datasource.js",
     "migration:run": "npm run build && node ./node_modules/typeorm/cli.js migration:run -d dist/datasource.js",
-    "migration:revert": "npm run build && node ./node_modules/typeorm/cli.js migration:revert -d dist/datasource.js"
+    "migration:revert": "npm run build && node ./node_modules/typeorm/cli.js migration:revert -d dist/datasource.js",
+    "seed:roles": "ts-node -r tsconfig-paths/register src/user/seed/seed-roles.ts",
+    "seed:roles:prod": "node dist/user/seed/seed-roles.js"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
