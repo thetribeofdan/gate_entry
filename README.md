@@ -1,40 +1,62 @@
-A Real Estate Application that manages Visior/Gate entries Using QR CODE Scans and AI Camera Automations
+# Real Estate Visitor/Gate Entry Management System
 
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+A Real Estate Application that manages Visitor/Gate entries using QR CODE scans and AI camera automations. Built with [NestJS](https://nestjs.com/) and TypeScript, this backend system streamlines visitor registration, approval, and entry tracking for residential estates.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Project Overview
 
-## Description
+This application enables estate managers, occupants, and gatemen to securely manage visitor access:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Visitor Registration:** Occupants and gatemen can register visitors. Each visitor entry generates a unique QR code.
+- **Approval Workflow:** Occupants can approve or reject visitor entries. Gatemen can register unexpected visitors for approval.
+- **QR Code Scanning:** Gatemen scan QR codes at the gate to validate and allow entry.
+- **Automated Cleanup:** Expired or unused visitor entries are automatically cleaned up daily.
+- **Role-Based Access:** Actions are restricted based on user roles (admin, occupant, gateman).
+- **Notifications:** Email notifications are sent for onboarding and visitor approvals (future integration with AI camera automations and push notifications).
 
-## Project setup
+---
+
+## Main Workflows
+
+### 1. Occupant Visitor Registration
+
+- Occupant registers a visitor via the app.
+- Visitor entry is automatically approved.
+- QR code is generated and sent to the visitor.
+
+### 2. Gateman Visitor Registration
+
+- Gateman registers an unexpected visitor at the gate.
+- Entry is marked as pending.
+- Occupant receives a notification to approve or reject the entry.
+
+### 3. Approval & Rejection
+
+- Occupant reviews pending visitor entries.
+- Approves or rejects via the app.
+- Status is updated and reflected at the gate.
+
+### 4. Gate Entry via QR Code
+
+- Visitor presents QR code at the gate.
+- Gateman scans QR code.
+- System validates entry, checks approval and expiry.
+- If valid, visitor is allowed in; otherwise, entry is denied.
+
+### 5. Automated Cleanup
+
+- Every midnight, expired or unused entries are marked as expired and cleaned up.
+
+---
+
+## Project Setup
 
 ```bash
 $ npm install
 ```
 
-## Compile and run the project
+## Compile and Run
 
 ```bash
 # development
@@ -47,7 +69,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Run tests
+## Run Tests
 
 ```bash
 # unit tests
@@ -60,28 +82,27 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+---
+
+## Technologies Used
+
+- **NestJS** (Node.js framework)
+- **TypeORM** (MySQL database)
+- **JWT Authentication**
+- **Role-based Access Control**
+- **Email Notifications**
+- **Scheduled Cron Jobs**
+
+---
+
 ## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+- [NestJS Documentation](https://docs.nestjs.com)
+- [Discord Channel](https://discord.gg/G7Qnnhy)
+- [NestJS Devtools](https://devtools.nestjs.com)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE)
