@@ -20,6 +20,8 @@ export default new DataSource({
       : 'src/**/entities/*.entity.ts',
   ],
   migrations: [
-    isProd ? join(__dirname, '/migrations/*.js') : 'src/**/migrations/*.ts',
+    isProd
+      ? join(__dirname, '/**/migrations/*.js')
+      : 'src/**/migrations/*.ts',
   ],
 });
